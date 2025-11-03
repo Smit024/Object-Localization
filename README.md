@@ -1,116 +1,151 @@
-Object Localization Using Traditional Machine Learning
-End‑to‑end pipeline to detect and localize objects in 128×128 grayscale images with traditional ML and DL baselines. Includes preprocessing, model training, evaluation (MSE, IoU), and a Gradio demo.
+# End-to-End Object Localization with ML/DL
 
-Abstract
-This project detects and localizes objects in grayscale images using traditional machine learning techniques. We built a complete ML pipeline from data preprocessing and EDA to training models and evaluating predictions using bounding box metrics like MSE and IoU.
+This repository contains the final project for **CSCI 4750 – Machine Learning**, developed by **Group 32 (Smit Patel, Shubham Limbachiya)**. The project implements a full pipeline to detect and localize objects in grayscale images by predicting bounding box coordinates.
 
-Dataset
-Images: 5,000 grayscale (128×128)
+We compare the performance of traditional machine learning models (Linear Regression, Random Forest, KNN) against deep learning approaches (MLP, CNN) to determine the most effective method for this regression-based image task.
 
-Annotations: CSV with columns x, y, width, height
+## Live Demo
 
-Features: Flattened pixels (16,384 per image)
+An interactive web demo was built with Gradio to allow live predictions. You can upload any 128x128 grayscale image and select one of the five trained models to see its predicted bounding box.
 
-Folder layout expected:
+*(To add a screenshot, run `app.py` locally, take a screenshot, upload it to your GitHub repo, and replace the line below)*
+`![Gradio App Demo](httpsDELETEME/path/to/your/demo_screenshot.png)`
 
-data/images/ (PNG/JPG, 128×128, grayscale)
+## Model Performance
 
-data/image_annotation.csv
+Models were evaluated on **Mean Squared Error (MSE)** for coordinate accuracy and **Intersection over Union (IoU)** for spatial overlap. The **CNN** and **KNN** models performed the best, achieving the highest IoU scores.
 
-Models Implemented
-Linear Regression (baseline)
+| Model | MSE | Average IoU |
+| :--- | :---: | :---: |
+| Linear Regression | 27.19 | 0.6681 |
+| Random Forest | 28.84 | 0.6971 |
+| MLP (Keras) | 21.49 | 0.7165 |
+| **CNN (Keras)** | **4.41** | **0.8457** |
+| **KNN (n=3)** | **9.24** | **0.8461** |
 
-Random Forest (ensemble regression)
+### Visual Comparison
 
-K‑Nearest Neighbors (instance‑based)
+The difference in performance is clear when visualizing the predictions. KNN and CNN (not shown) capture the object's location accurately, while Linear Regression and Random Forest struggle with the spatial complexity.
 
-Multilayer Perceptron (feedforward NN)
+*(You can get these images by running the visualization cells [7cAWBtygTto4], [eaSqE-hdUKlb], and [HHxocUa1UX83] in your notebook, saving the plots, and uploading them to a `visualizations` folder in your repo.)*
 
-Convolutional Neural Network (spatial features)
+| KNN Prediction (High IoU) | Random Forest Prediction | Linear Regression (Low IoU) |
+| :---: | :---: | :---: |
+| ![KNN Example](./visualizations/knn_vs_actual.png) | ![RF Example](./visualizations/rf_vs_actual.png) | ![LR Example](./visualizations/lr_vs_actual.png) |
 
-Results
-Model	MSE	Avg IoU
-Linear Regression	27.19	0.6681
-Random Forest	28.84	0.6971
-KNN	9.24	0.8461
-MLP	21.49	0.7165
-CNN	4.41	0.8457
-Installation
-bash
-# Python 3.10+ recommended
-python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
+---
+
+## Installation & Setup
+
+**1. Clone the Repository**
+```bash
+git clone [https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git)
+cd YOUR_REPO_NAME
+```
+
+**2. Create and Activate a Virtual Environment**
+```bash
+# On macOS/Linux
+python3 -m venv venv
+source venv/bin/activate
+
+# On Windows
+python -m venv venv
+.\venv\Scripts\activate
+```
+
+**3. Install Dependencies**
+This project requires several Python libraries. A `requirements.txt` file is provided for easy installation.
+```bash
 pip install -r requirements.txt
-Usage
-1) Train / Explore in Notebook
-bash
+```
+
+**4. Download Data and Models**
+
+Due to their size, the image dataset (`images_repo.zip`) and the trained models (`.joblib`, `.keras`) are not stored in this GitHub repository.
+
+* **Data:** Download the dataset from [**<-- PASTE YOUR GOOGLE DRIVE/DROPBOX LINK HERE**]. Unzip and place the `images_repo` folder in the root of this project.
+* **Models:** Download the trained models from [**<-- PASTE YOUR GOOGLE DRIVE/DROPBOX LINK HERE**]. Unzip and place all `.joblib` and `.keras` files in the root of this project.
+
+---
+
+## How to Run
+
+### 1. Run the Jupyter Notebook
+To see the full process of data loading, EDA, model training, and evaluation, you can run the main notebook:
+```bash
 jupyter notebook Group32_Object_Localization_ML_Final_Project.ipynb
-Update any paths to data/images and data/image_annotation.csv if needed.
+```
 
-The notebook saves trained models into models/.
+### 2. Launch the Gradio Web Demo
+To run the interactive web demo, simply execute the `app.py` script. This requires all model files (`.joblib`, `.keras`) to be in the same directory.
+```bash
+python app.py
+```
+Open the local URL (e.g., `http://127.0.0.1:7860`) in your browser.
 
-2) Run Gradio Demo
-bash
-python gradio_demo.py
-Upload a 128×128 grayscale image and choose a model to visualize the predicted bounding box.
+---
 
-Project Structure
-text
-.
-├─ README.md
-├─ requirements.txt
-├─ .gitignore
-├─ Group32_Object_Localization_ML_Final_Project.ipynb
-├─ gradio_demo.py
-├─ data/
-│  ├─ images/                 # your 128x128 grayscale images
-│  └─ image_annotation.csv    # x,y,width,height
-├─ models/                    # saved models (excluded in .gitignore or use Git LFS)
-│  ├─ linear_model.joblib
-│  ├─ rf_model.joblib
-│  ├─ knn_model.joblib
-│  ├─ mlp_model.keras
-│  └─ cnn_model.keras
-└─ assets/                    # optional sample images, plots
-Key Features
-End‑to‑end pipeline: preprocessing, training, evaluation, visualization
+## Future Work
 
-Multiple models: traditional ML + DL baselines
+To enhance this project, future steps could include:
+-   Applying **dimensionality reduction** (PCA, Autoencoders) to speed up training for traditional models.
+-   Performing **rigorous hyperparameter tuning** using GridSearchCV or Bayesian Optimization.
+-   Adding **data augmentation** to improve the CNN model's generalization.
+-   Extending the dataset and models to handle **multi-object detection**.
 
-Interactive demo: Gradio web UI for quick testing
+## 👥 Contributors
 
-Evaluation metrics: MSE and IoU for bounding boxes
+This project was developed collaboratively by **Group 32**:
 
-Reproducibility
-Set random seeds inside the notebook (NumPy, TensorFlow, scikit‑learn).
+* **Smit Patel:**
+    * Led data loading, preprocessing, EDA, and bounding box visualization.
+    * Implemented MLP and CNN deep learning models using TensorFlow/Keras.
+    * Created evaluation logic and visual comparison plots.
+* **Shubham Limbachiya:**
+    * Focused on model training for traditional ML (KNN, Random Forest, Linear Regression).
+    * Managed hyperparameter tuning using GridSearchCV.
+    * Contributed to performance evaluation, error analysis, and documentation.
 
-Document any non‑default hyperparameters in the notebook cells.
+<br>
+<details>
+<summary><b>Recommended <code>requirements.txt</code> file</b></summary>
 
-Future Work
-PCA/autoencoders for dimensionality reduction
+```
+pandas
+seaborn
+matplotlib
+scikit-learn
+tensorflow
+gradio
+Pillow
+```
+</details>
 
-Grid/Bayesian hyperparameter tuning
+<details>
+<summary><b>Recommended <code>.gitignore</code> file</b></summary>
 
-CNN data augmentation
+```
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.env
 
-Multi‑object detection
+# Data & Models (These are too large for GitHub)
+*.zip
+*.joblib
+*.keras
+*.h5
+images_repo/
 
-Contributors
-Smit Patel — data preprocessing, EDA, MLP/CNN implementation
+# OS-specific
+.DS_Store
+Thumbs.db
 
-Shubham Limbachiya — traditional ML models, hyperparameter tuning, documentation
-
-License
-This project is released under the MIT License. See LICENSE for details.
-
-How to Cite
-If you reference this work, please cite the repository:
-
-text
-@software{group32_object_localization_2025,
-  title   = {Object Localization Using Traditional Machine Learning},
-  author  = {Patel, Smit and Limbachiya, Shubham},
-  year    = {2025},
-  url     = {https://github.com/your-username/Object-Localization-ML}
-}
-
+# IDE
+.vscode/
+.idea/
+```
+</details>
