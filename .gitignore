@@ -1,0 +1,26 @@
+# Python cache & virtual environments
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.env
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Large Data Files
+# We explicitly ignore all zips and data folders...
+*.zip
+images_repo/
+
+# ...but we *force* Git to include the annotation CSV.
+!image_annotation.csv
+
+# Large Model Files
+*.joblib
+*.keras
+*.h5
+
+# OS-specific files
+.DS_Store
+Thumbs.db
